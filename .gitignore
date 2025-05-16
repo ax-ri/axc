@@ -1,1 +1,12 @@
+.depend
+*.cm[io]
+*.cmx 
+*~ 
+.*~ 
+*.o
+parser.mli
+axc_lex.ml 
+axc_parse.ml
+axc_parse.mli
+axc_loop
 notes.md
