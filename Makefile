@@ -3,13 +3,14 @@ CAMLDEP=$(BINDIR)ocamldep
 CAMLLEX=$(BINDIR)ocamllex
 CAMLYACC=$(BINDIR)ocamlyacc
 # COMPFLAGS=-w A-4-6-9 -warn-error A -g
-COMPFLAGS=
+COMPFLAGS=-I `ocamlfind query unix`
+CAML_B_LFLAGS = `ocamlfind query -predicates byte -a-format unix`
 
-EXEC = axcloop
+EXEC = axc_loop
 
 # Fichiers compilés, à produire pour fabriquer l'exécutable
-SOURCES = axcast.ml axcloop.ml
-GENERATED = axclex.ml axcparse.ml axcparse.mli
+SOURCES = sound_engine.ml axc_ast.ml axc_loop.ml 
+GENERATED = axc_lex.ml axc_parse.ml axc_parse.mli
 MLIS =
 OBJS = $(GENERATED:.ml=.cmo) $(SOURCES:.ml=.cmo)
 
@@ -17,7 +18,7 @@ OBJS = $(GENERATED:.ml=.cmo) $(SOURCES:.ml=.cmo)
 all: $(EXEC)
 
 $(EXEC): $(OBJS)
-	$(CAMLC) $(COMPFLAGS) $(OBJS) -o $(EXEC)
+	$(CAMLC) $(CAML_B_LFLAGS) $(COMPFLAGS) $(OBJS) -o $(EXEC)
 
 .SUFFIXES:
 .SUFFIXES: .ml .mli .cmo .cmi .cmx

@@ -27,14 +27,14 @@ let main() =
   while true do
     try
       let _ = Printf.printf  "> %!" in
-      let e = Axcparse.main Axclex.lex lexbuf in
+      let e = Axc_parse.main Axc_lex.lex lexbuf in
       let _ = Printf.printf "Recognized: " in
-      let _ = Axcast.print stdout e in
+      let _ = Axc_ast.print stdout e in
 (*    let _ = Printf.fprintf stdout " =\n%!" in
       let _ = Axcsem.printval (Axcsem.eval e) in *)
       Printf.printf "\n%!"
     with
-      Axclex.Eoi -> Printf.printf  "Bye bye.\n%!" ; exit 0
+      Axc_lex.Eoi -> Printf.printf  "Farewell.\n%!" ; exit 0
     | Failure msg -> Printf.printf "Erreur: %s\n\n" msg
     | Parsing.Parse_error ->
         let sp = Lexing.lexeme_start_p lexbuf in
@@ -45,7 +45,7 @@ let main() =
           sp.Lexing.pos_lnum
           (sp.Lexing.pos_cnum - sp.Lexing.pos_bol)
           (ep.Lexing.pos_cnum - sp.Lexing.pos_bol)
-    | Axclex.LexError (sp, ep) ->
+    | Axc_lex.LexError (sp, ep) ->
         Printf.printf
           "File %S, line %i, characters %i-%i: Lexical error.\n"
           sp.Lexing.pos_fname
