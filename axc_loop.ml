@@ -24,15 +24,15 @@ let main() =
   in
   let _ = Printf.printf "        Welcome to AXC, version %s\n%!" version in
   let lexbuf = Lexing.from_channel input_channel in
+  let rho = Axc_sem.init_env () in
   while true do
     try
       let _ = Printf.printf  "> %!" in
       let e = Axc_parse.main Axc_lex.lex lexbuf in
       let _ = Printf.printf "Recognized: " in
       let _ = Axc_ast.print stdout e in
-(*    let _ = Printf.fprintf stdout " =\n%!" in
-      let _ = Axcsem.printval (Axcsem.eval e) in *)
-      Printf.printf "\n%!"
+      let _ = Printf.fprintf stdout "\n%!" in
+      let _ = Axc_sem.eval e rho in ()
     with
       Axc_lex.Eoi -> Printf.printf  "Farewell.\n%!" ; exit 0
     | Failure msg -> Printf.printf "Erreur: %s\n\n" msg
