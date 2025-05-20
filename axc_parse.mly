@@ -37,8 +37,6 @@ sound_list:
     | rhythm pitch sound_list                           { (EBasicSound($1, $2))::$3 }
     | compacted_rhythm                                  { $1 }
     | compacted_rhythm sound_list                       { $1@$2 }
-    // | LPAR pitch_list RPAR                  { (List.map (fun p -> EBasicSound(ERhythm(-1), p)) $2) } 
-    // | LPAR pitch_list RPAR sound_list       { (List.map (fun p -> EBasicSound(ERhythm(-1), p)) $2)@$4 } 
     | TIE LPAR rhythm rhythm pitch RPAR                 { [ELongSound($3, $4, $5)] }
     | TIE LPAR rhythm rhythm pitch RPAR sound_list      { (ELongSound($3, $4, $5))::$7 }
     | DOT LPAR RHYTHM INT pitch RPAR                    { [ELongSound(ERhythm($4), ERhythm(2 * $4), $5)] }

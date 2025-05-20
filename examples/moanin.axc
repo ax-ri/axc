@@ -1,0 +1,12 @@
+# Moanin'
+
+tempo !4 130
+
+dot(!8 fa) !16 fa dot(!8 lab) !16 lab dot(!8 fa) !16 do !4 (mib fa)
+dot(!4 ré3) dot(!4 do3) !4 .
+
+dot(!8 fa) !16 fa dot(!8 lab) !16 lab dot(!8 sib) !16 sib !64 (do5 sib lab fa) !4 fa
+dot(!4 ré3) dot(!4 do3) !4 .
+
+dot(!8 fa) !16 fa dot(!8 do5) tie(!16 !4 mi5b) !64 (do5 sib si lab) !4 fa
+dot(!4 ré3) dot(!4 do3) !4 .
