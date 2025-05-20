@@ -1,0 +1,10 @@
+# générique channel
+
+tempo !4 110
+beat 4 !4
+
+default_scale 4
+default_rhythm !8
+
+do do5 !16 (sol sib) tie(!8 !4 do5)
+sol mib !4 fa !16 (mib ré) tie(!8 !4 do) !4 si3b

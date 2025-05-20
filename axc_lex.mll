@@ -39,14 +39,17 @@ rule lex = parse
   | '!' { RHYTHM }
   | '(' { LPAR }
   | ')' { RPAR }
+  | '.' { PITCH('.', 0, 0) }
   | (pitch_symbol as p)(scale_symbol as s)?(accidental_symbol as a)? { PITCH(pitch_symbol_as_char p, scale_of_char s, acc_of_string a) }
   | ['1'-'9']['0'-'9']* as lxm { INT(int_of_string lxm) }
-  | [ 'A'-'Z' 'a'-'z' ] [ 'A'-'Z' 'a'-'z' ]* as lxm { match lxm with
+  | [ 'A'-'Z' 'a'-'z' ] [ 'A'-'Z' 'a'-'z' '_' ]* as lxm { match lxm with
     | "tempo" -> TEMPO
     | "beat" -> BEAT
     | "tie" -> TIE
     | "dot" -> DOT
     | "chord" -> CHORD
+    | "default_scale" -> DEFAULT_SCALE
+    | "default_rhythm" -> DEFAULT_RHYTHM
     | _ -> IDENT(lxm)
   }
   | eof   { raise Eoi }

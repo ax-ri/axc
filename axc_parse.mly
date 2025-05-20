@@ -7,7 +7,7 @@
 %token <char * int * int> PITCH
 %token RHYTHM
 %token LPAR RPAR NEWLINE
-%token TEMPO BEAT TIE DOT CHORD
+%token TEMPO BEAT TIE DOT CHORD DEFAULT_SCALE DEFAULT_RHYTHM
 
 %start main
 %type <Axc_ast.expr> main
@@ -24,18 +24,25 @@ expr:
     | sound_list                            { ESound($1) }
     | TEMPO rhythm INT                      { ETempo($2, $3) }
     | BEAT INT rhythm                       { EBeat($2, $3) }
-    | TIE LPAR rhythm rhythm pitch RPAR     { ETie($3, $4, $5) }
-    | DOT LPAR RHYTHM INT pitch RPAR        { ETie(ERhythm($4), ERhythm(2 * $4), $5) }
+    | DEFAULT_SCALE INT                     { EDefaultScale($2) }
+    | DEFAULT_RHYTHM rhythm                 { EDefaultRhythm($2) }
 
 sound_list:
-    // | { [] }
-    | rhythm pitch                 { [($1, $2)] }
-    | compacted_rhythm             { $1 }
-    | rhythm pitch sound_list      { ($1, $2)::$3 }
-    | compacted_rhythm sound_list  { $1@$2 }
+    | pitch                                             { [EBasicSound(ERhythm(-1), $1)] }
+    | pitch sound_list                                  { (EBasicSound(ERhythm(-1), $1))::$2 }
+    | rhythm pitch                                      { [EBasicSound($1, $2)] }
+    | rhythm pitch sound_list                           { (EBasicSound($1, $2))::$3 }
+    | compacted_rhythm                                  { $1 }
+    | compacted_rhythm sound_list                       { $1@$2 }
+    // | LPAR pitch_list RPAR                  { (List.map (fun p -> EBasicSound(ERhythm(-1), p)) $2) } 
+    // | LPAR pitch_list RPAR sound_list       { (List.map (fun p -> EBasicSound(ERhythm(-1), p)) $2)@$4 } 
+    | TIE LPAR rhythm rhythm pitch RPAR                 { [ELongSound($3, $4, $5)] }
+    | TIE LPAR rhythm rhythm pitch RPAR sound_list      { (ELongSound($3, $4, $5))::$7 }
+    | DOT LPAR RHYTHM INT pitch RPAR                    { [ELongSound(ERhythm($4), ERhythm(2 * $4), $5)] }
+    | DOT LPAR RHYTHM INT pitch RPAR sound_list         { (ELongSound(ERhythm($4), ERhythm(2 * $4), $5))::$7 }
 
 compacted_rhythm:
-    | RHYTHM INT LPAR pitch_list RPAR { (List.map (fun p -> ERhythm($2), p) $4) }
+    | rhythm LPAR pitch_list RPAR { (List.map (fun p -> EBasicSound($1, p)) $3) }
 
 pitch:
     | PITCH                                { let (p, s, a) = $1 in ESimplePitch(p, s, a) }

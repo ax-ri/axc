@@ -9,7 +9,7 @@ CAML_B_LFLAGS = `ocamlfind query -predicates byte -a-format unix`
 EXEC = axc_loop
 
 # Fichiers compilés, à produire pour fabriquer l'exécutable
-SOURCES = sound_engine.ml axc_ast.ml axc_sem.ml axc_loop.ml 
+SOURCES = utils.ml sound_engine.ml axc_ast.ml axc_sem.ml axc_loop.ml 
 GENERATED = axc_lex.ml axc_parse.ml axc_parse.mli
 MLIS =
 OBJS = $(GENERATED:.ml=.cmo) $(SOURCES:.ml=.cmo)

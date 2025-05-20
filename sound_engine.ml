@@ -2,7 +2,8 @@
 (* f is the sound frequency (Hz) and l the length (s) *)
 let sox_beep f l =
   let l_ms = l /. 1000.0 in
-  let command = Printf.sprintf "play -nq -t alsa synth %f sin %f" l_ms f in
+  let freq_list = String.concat " " (List.map (fun f -> Printf.sprintf "pl %f" f) f) in
+  let command = Printf.sprintf "play -nq -t alsa synth %f %s" l_ms freq_list in
   let _ = Unix.system command in
   ()
 ;;
@@ -39,10 +40,8 @@ let freq_of_pitch p s a =
   a_tuning *. Float.pow 2. (((n -. 9.) /. 12.) +. float_of_int s -. middle_c_scale)
 ;;
 
-(* play a simple pitch (pitch, scale, accidental) for a duration d *)
 let play p s a d =
   if p = '.' then rest (d /. 1000.) else sox_beep [ freq_of_pitch p s a ] d
 ;;
 
-(* play a multiple pitch (list of pitch, scale, accidental) for a duration d *)
 let play_chord l d = sox_beep (List.map (fun (p, s, a) -> freq_of_pitch p s a) l) d
