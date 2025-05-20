@@ -35,7 +35,7 @@ let main() =
       let _ = Axc_sem.eval e rho in ()
     with
       Axc_lex.Eoi -> Printf.printf  "Farewell.\n%!" ; exit 0
-    | Failure msg -> Printf.printf "Erreur: %s\n\n" msg
+    | Failure msg -> Printf.printf "Error: %s\n\n" msg
     | Parsing.Parse_error ->
         let sp = Lexing.lexeme_start_p lexbuf in
         let ep = Lexing.lexeme_end_p lexbuf in

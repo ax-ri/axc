@@ -8,7 +8,7 @@
 %token RHYTHM
 %token EQUAL
 %token LPAR RPAR NEWLINE
-%token TEMPO BEAT TIE DOT CHORD DEFAULT_SCALE DEFAULT_RHYTHM
+%token TEMPO BEAT TIE DOT CHORD DEFAULT_SCALE DEFAULT_RHYTHM TRANSPOSE
 
 %start main
 %type <Axc_ast.expr> main
@@ -26,6 +26,7 @@ expr:
     | BEAT INT rhythm                       { EBeat($2, $3) }
     | DEFAULT_SCALE INT                     { EDefaultScale($2) }
     | DEFAULT_RHYTHM rhythm                 { EDefaultRhythm($2) }
+    | TRANSPOSE INT                         { ETranspose($2) }
     | IDENT EQUAL expr                      { EAssign($1, $3) }
     | IDENT LPAR RPAR                       { EExec($1) }
 

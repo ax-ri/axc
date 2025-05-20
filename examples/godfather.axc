@@ -1,0 +1,26 @@
+# The Godfather Theme
+
+tempo !4 85
+beat 4 !4
+
+transpose 2
+
+default_rhythm !8
+default_scale 5
+
+phrase1 = . sol4 do mib ré do mib do ré do la4b si4b !2 sol4 .
+phrase2 = . sol4 do mib ré do mib do ré do sol4 fa4# !2 fa4 .
+phrase3 = . fa4 la4b si4 !2 ré
+phrase4 = . fa4 la4b si4 !2 do  
+
+phrase1()
+phrase2()
+phrase3()
+phrase4()
+. do4 mi4b si4b la4b sol4 si4b la4b la4b sol4 sol4 fa4# !2 sol4
+
+phrase1()
+phrase2()
+phrase3()
+phrase4()
+. do4 mi4b si4b la4b sol4 si4b la4b la4b sol4 sol4 si4 dot(!2 do)

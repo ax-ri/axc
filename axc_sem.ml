@@ -3,6 +3,7 @@ type env = {
   mutable beat: int * Axc_ast.rhythm;
   mutable default_scale: int;
   mutable default_rhythm: Axc_ast.rhythm;
+  mutable transposition: int;
   mutable identifiers: (string * Axc_ast.expr) list;
 }
 
@@ -11,7 +12,8 @@ let init_env () = {
   beat = (4, Axc_ast.ERhythm 4);
   default_scale = 4;
   default_rhythm = Axc_ast.ERhythm(4);
-  identifiers = []
+  transposition = 0;
+  identifiers = [];
 }
 ;;
 
@@ -24,8 +26,8 @@ let compute_duration rho r' =
 
 let play_pitch rho p d = 
   match p with
-  | Axc_ast.ESimplePitch(p, s, a) -> Sound_engine.play p (if s = -1 then rho.default_scale else s) a d
-  | Axc_ast.EMultiplePitch l -> Sound_engine.play_chord (List.map (fun (p, s, a) -> p, (if s = -1 then rho.default_scale else s), a) l) d
+  | Axc_ast.ESimplePitch(p, s, a) -> Sound_engine.play p (if s = -1 then rho.default_scale else s) (a + rho.transposition) d
+  | Axc_ast.EMultiplePitch l -> Sound_engine.play_chord (List.map (fun (p, s, a) -> p, (if s = -1 then rho.default_scale else s), (a + rho.transposition)) l) d
 ;;
 
 let play_sound rho = function
@@ -48,6 +50,7 @@ let rec eval e rho = match e with
   | Axc_ast.ESound l -> List.iter (play_sound rho) l
   | Axc_ast.EDefaultScale s -> rho.default_scale <- s
   | Axc_ast.EDefaultRhythm r -> rho.default_rhythm <- r
+  | Axc_ast.ETranspose n -> rho.transposition <- n
   | Axc_ast.EAssign(id, e) -> rho.identifiers <- add_to_env rho.identifiers id e
   | Axc_ast.EExec(id) -> (
     try let e' = find_expr_in_env rho.identifiers id in eval e' rho

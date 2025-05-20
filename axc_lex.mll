@@ -42,8 +42,8 @@ rule lex = parse
   | '.' { PITCH('.', 0, 0) }
   | '=' { EQUAL }
   | (pitch_symbol as p)(scale_symbol as s)?(accidental_symbol as a)? { PITCH(pitch_symbol_as_char p, scale_of_char s, acc_of_string a) }
-  | ['1'-'9']['0'-'9']* as lxm { INT(int_of_string lxm) }
-  | [ 'A'-'Z' 'a'-'z' ] [ 'A'-'Z' 'a'-'z' '_' ]* as lxm { match lxm with
+  | '-'?['1'-'9']['0'-'9']* as lxm { INT(int_of_string lxm) }
+  | [ 'A'-'Z' 'a'-'z' ] [ 'A'-'Z' 'a'-'z' '1'-'9' '_' ]* as lxm { match lxm with
     | "tempo" -> TEMPO
     | "beat" -> BEAT
     | "tie" -> TIE
@@ -51,6 +51,7 @@ rule lex = parse
     | "chord" -> CHORD
     | "default_scale" -> DEFAULT_SCALE
     | "default_rhythm" -> DEFAULT_RHYTHM
+    | "transpose" -> TRANSPOSE
     | _ -> IDENT(lxm)
   }
   | eof   { raise Eoi }

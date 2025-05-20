@@ -16,7 +16,8 @@ type expr =
   | EBeat of (int * rhythm)               (* beat(count <rhythm>) *)
   | EDefaultScale of int                  (* default_scale <scale> *)
   | EDefaultRhythm of rhythm              (* default_rhythm <rhythm> *)
-  | EAssign of (string * expr)        (* identifier = <expr> *)
+  | ETranspose of int                     (* transpose <semitones> *)
+  | EAssign of (string * expr)            (* identifier = <expr> *)
   | EExec of string                       (* identifier() *)
 ;;
 
@@ -41,8 +42,9 @@ let rec print oc = function
   | ESound l -> Printf.fprintf oc "Sound(%s)" (String.concat "; " (List.map print_sound l))
   | ETempo(r, i) -> Printf.fprintf oc "Tempo %s = %d" (print_rhythm r) i
   | EBeat(i, r) -> Printf.fprintf oc "Beat %d x %s" i (print_rhythm r)
-  | EDefaultScale(s) -> Printf.fprintf oc "Default scale %d" s
-  | EDefaultRhythm(r) -> Printf.fprintf oc "Default rhythm %s" (print_rhythm r)
+  | EDefaultScale s -> Printf.fprintf oc "Default scale %d" s
+  | EDefaultRhythm r -> Printf.fprintf oc "Default rhythm %s" (print_rhythm r)
+  | ETranspose n -> Printf.fprintf oc "Transpose %d" n
   | EAssign(s, e) -> Printf.fprintf oc "Ident %s is %a" s print e
-  | EExec(s) -> Printf.fprintf oc "Exec %s" s
+  | EExec s -> Printf.fprintf oc "Exec %s" s
   
