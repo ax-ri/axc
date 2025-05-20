@@ -6,6 +6,7 @@
 %token <string> IDENT
 %token <char * int * int> PITCH
 %token RHYTHM
+%token EQUAL
 %token LPAR RPAR NEWLINE
 %token TEMPO BEAT TIE DOT CHORD DEFAULT_SCALE DEFAULT_RHYTHM
 
@@ -20,12 +21,13 @@ main:
 ;
 
 expr: 
-    // | IDENT                                 { EIdent $1 }
     | sound_list                            { ESound($1) }
     | TEMPO rhythm INT                      { ETempo($2, $3) }
     | BEAT INT rhythm                       { EBeat($2, $3) }
     | DEFAULT_SCALE INT                     { EDefaultScale($2) }
     | DEFAULT_RHYTHM rhythm                 { EDefaultRhythm($2) }
+    | IDENT EQUAL expr                      { EAssign($1, $3) }
+    | IDENT LPAR RPAR                       { EExec($1) }
 
 sound_list:
     | pitch                                             { [EBasicSound(ERhythm(-1), $1)] }
