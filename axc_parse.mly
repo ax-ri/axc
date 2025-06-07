@@ -28,7 +28,7 @@ expr:
     | DEFAULT_RHYTHM rhythm                 { EDefaultRhythm($2) }
     | TRANSPOSE INT                         { ETranspose($2) }
     | IDENT EQUAL expr                      { EAssign($1, $3) }
-    | IDENT LPAR RPAR                       { EExec($1) }
+    | IDENT                                 { EExec($1) }
 
 sound_list:
     | pitch                                             { [EBasicSound(ERhythm(-1), $1)] }

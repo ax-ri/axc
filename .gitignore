@@ -11,3 +11,4 @@ axc_parse.mli
 axc_loop
 notes.md
 sound-example/*
+notes.md

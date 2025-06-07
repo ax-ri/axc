@@ -20,7 +20,7 @@ let init_env () = {
 let compute_duration rho r' = 
   let r' = if r' = -1 then Utils.extract_rhythm rho.default_rhythm else r' in
   let r, d = rho.tempo in
-  let r = match r with Axc_ast.ERhythm(r'') -> r'' in
+  let r = Utils.extract_rhythm r in
   (60000. *. (float_of_int r)) /. ((float_of_int d) *. (float_of_int r'))
 ;;
 

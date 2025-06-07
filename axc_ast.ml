@@ -10,7 +10,7 @@ type sound =
   | ELongSound of rhythm * rhythm * pitch
 
 type expr = 
-  | ENone
+  | ENone                                 (* no expression *)
   | ESound of sound list                  (* sound *)
   | ETempo of (rhythm * int)              (* tempo(<rhythm> duration) *)
   | EBeat of (int * rhythm)               (* beat(count <rhythm>) *)
@@ -18,7 +18,7 @@ type expr =
   | EDefaultRhythm of rhythm              (* default_rhythm <rhythm> *)
   | ETranspose of int                     (* transpose <semitones> *)
   | EAssign of (string * expr)            (* identifier = <expr> *)
-  | EExec of string                       (* identifier() *)
+  | EExec of string                       (* identifier *)
 ;;
 
 let string_of_pitch (p, s, a) = Printf.sprintf "%c%d%s" p s (match a with | 1 -> "#" | -1 -> "b" | _ -> "")
