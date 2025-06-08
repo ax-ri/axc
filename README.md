@@ -6,7 +6,9 @@ AXC is a small programming language to write pieces of music. The source code ca
 
 ### Build and run
 
-AXC source files are simple text files. You can use your favorite text editor to write them (see the [Syntax](#syntax) section below).
+AXC source files are simple text files. You can use your favorite text editor to write them. If you are using [Visual Studio Code](https://code.visualstudio.com), then you can use [this extension](https://github.com/ax-ri/axc-syntax) that provides language support for AXC (especially syntax highlighting).
+
+To know what to put in an AXC source file, see the [Syntax](#syntax) section below.
 
 To use the AXC interpreter to play your source file, you have to build this project from sources:
 
