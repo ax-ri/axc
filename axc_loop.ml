@@ -1,4 +1,4 @@
-let version = "0.01"
+let version = "1.0.0"
 
 let usage () =
   let _ =
