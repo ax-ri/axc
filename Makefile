@@ -47,5 +47,5 @@ depend: utils.ml $(SOURCES) $(GENERATED)
 	touch .depend
 	$(CAMLDEP) utils.ml $(SOURCES) $(GENERATED) > .depend
 
-include .depend
+-include .depend
 

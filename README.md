@@ -24,7 +24,7 @@ To play sounds, the interpreter relies on the `play` command of the `sox` librar
 
 ### Build
 
-In the root directory of the project, run `make depend all` to build the project.
+First, clone this repository. Then, in the root directory of the project, run `make depend && make` to build the project.
 
 ### Run
 
