@@ -44,8 +44,6 @@ compacted_rhythm:
 pitch:
     | PITCH                                { let (p, s, a) = $1 in SimplePitch(p, s, a) }
     | CHORD LPAR simple_pitch_list RPAR    { MultiplePitch $3 }
-    | PITCH                                { let (p, s, a) = $1 in SimplePitch(p, s, a) }
-    | CHORD LPAR simple_pitch_list RPAR    { MultiplePitch $3 }
 
 simple_pitch_list: 
     | { [] }
