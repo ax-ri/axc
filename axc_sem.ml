@@ -8,20 +8,26 @@ type env =
   }
 
 let init_env () =
-  { tempo = Axc_ast.Rhythm 4, 60
-  ; beat = 4, Axc_ast.Rhythm 4
+  { tempo = Axc_ast.SimpleRhythm 4, 60
+  ; beat = 4, Axc_ast.SimpleRhythm 4
   ; default_scale = 4
-  ; default_rhythm = Axc_ast.Rhythm 4
+  ; default_rhythm = Axc_ast.SimpleRhythm 4
   ; transposition = 0
   ; identifiers = []
   }
 ;;
 
 let compute_duration rho r' =
-  let r' = if r' = -1 then Utils.extract_rhythm rho.default_rhythm else r' in
-  let r, d = rho.tempo in
-  let r = Utils.extract_rhythm r in
-  60000. *. float_of_int r /. (float_of_int d *. float_of_int r')
+  let r = Utils.sum_rhythm (fst rho.tempo)
+  and d = snd rho.tempo in
+  let compute r' = 60000. *. float_of_int r /. (float_of_int d *. float_of_int r') in
+  let rec aux acc r' =
+    match r' with
+    | Axc_ast.SimpleRhythm r' ->
+      acc +. if r' = -1 then aux acc rho.default_rhythm else compute r'
+    | Axc_ast.ComposedRhythm (r1, r2) -> aux (aux acc r1) r2
+  in
+  aux 0. r'
 ;;
 
 let play_pitch rho p d =
@@ -41,11 +47,7 @@ let play_pitch rho p d =
       d
 ;;
 
-let play_sound rho = function
-  | Axc_ast.BasicSound (Axc_ast.Rhythm r, p) -> play_pitch rho p (compute_duration rho r)
-  | Axc_ast.LongSound (Axc_ast.Rhythm r1, Axc_ast.Rhythm r2, p) ->
-    play_pitch rho p (compute_duration rho r1 +. compute_duration rho r2)
-;;
+let play_sound rho (r, p) = play_pitch rho p (compute_duration rho r)
 
 let add_to_env ids id e =
   let rec aux acc = function

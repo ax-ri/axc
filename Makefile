@@ -9,10 +9,10 @@ CAML_B_LFLAGS = `ocamlfind query -predicates byte -a-format unix`
 EXEC = axc_loop
 
 # Fichiers compilés, à produire pour fabriquer l'exécutable
-SOURCES = utils.ml sound_engine.ml axc_ast.ml axc_sem.ml axc_loop.ml 
+SOURCES = sound_engine.ml axc_ast.ml axc_sem.ml axc_loop.ml 
 GENERATED = axc_lex.ml axc_parse.ml axc_parse.mli
 MLIS =
-OBJS = $(GENERATED:.ml=.cmo) $(SOURCES:.ml=.cmo)
+OBJS = utils.cmo $(GENERATED:.ml=.cmo) $(SOURCES:.ml=.cmo)
 
 # Building the world
 all: $(EXEC)
@@ -44,9 +44,9 @@ clean:
 	rm -f $(EXEC)
 
 # Dependencies
-depend: $(SOURCES) $(GENERATED) $(MLIS)
+depend: utils.ml $(SOURCES) $(GENERATED) $(MLIS)
 	touch .depend
-	$(CAMLDEP) $(SOURCES) $(GENERATED) $(MLIS) > .depend
+	$(CAMLDEP) utils.ml $(SOURCES) $(GENERATED) $(MLIS) > .depend
 
 include .depend
 

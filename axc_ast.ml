@@ -2,11 +2,11 @@ type pitch =
   | SimplePitch of char * int * int (* one pitch (e.g. c4, a7 etc. )*)
   | MultiplePitch of (char * int * int) list (* chord(<pitch> <pitch>...) *)
 
-type rhythm = Rhythm of int (* rhythm specifier *)
+type rhythm =
+  | SimpleRhythm of int (* rhythm specifier *)
+  | ComposedRhythm of rhythm * rhythm
 
-type sound =
-  | BasicSound of rhythm * pitch
-  | LongSound of rhythm * rhythm * pitch
+type sound = rhythm * pitch
 
 type expr =
   | ENone (* no expression *)
@@ -36,15 +36,12 @@ let print_pitch = function
     Printf.sprintf "Chord(%s)" (String.concat "; " (List.map string_of_pitch l))
 ;;
 
-let print_rhythm = function
-  | Rhythm i -> Printf.sprintf "R%d" i
+let rec print_rhythm = function
+  | SimpleRhythm i -> Printf.sprintf "R%d" i
+  | ComposedRhythm (a, b) -> Printf.sprintf "R(%s %s)" (print_rhythm a) (print_rhythm b)
 ;;
 
-let print_sound = function
-  | BasicSound (r, p) -> Printf.sprintf "%s %s" (print_rhythm r) (print_pitch p)
-  | LongSound (r1, r2, p) ->
-    Printf.sprintf "long %s %s %s" (print_rhythm r1) (print_rhythm r2) (print_pitch p)
-;;
+let print_sound (r, p) = Printf.sprintf "%s %s" (print_rhythm r) (print_pitch p)
 
 let rec print oc = function
   | ENone -> Printf.fprintf oc "<none>"
