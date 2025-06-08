@@ -1,12 +1,12 @@
 type pitch =
-  | ESimplePitch of char * int * int (* one pitch (e.g. c4, a7 etc. )*)
-  | EMultiplePitch of (char * int * int) list (* chord(<pitch> <pitch>...) *)
+  | SimplePitch of char * int * int (* one pitch (e.g. c4, a7 etc. )*)
+  | MultiplePitch of (char * int * int) list (* chord(<pitch> <pitch>...) *)
 
-type rhythm = ERhythm of int (* rhythm specifier *)
+type rhythm = Rhythm of int (* rhythm specifier *)
 
 type sound =
-  | EBasicSound of rhythm * pitch
-  | ELongSound of rhythm * rhythm * pitch
+  | BasicSound of rhythm * pitch
+  | LongSound of rhythm * rhythm * pitch
 
 type expr =
   | ENone (* no expression *)
@@ -31,18 +31,18 @@ let string_of_pitch (p, s, a) =
 ;;
 
 let print_pitch = function
-  | ESimplePitch (p, s, a) -> string_of_pitch (p, s, a)
-  | EMultiplePitch l ->
+  | SimplePitch (p, s, a) -> string_of_pitch (p, s, a)
+  | MultiplePitch l ->
     Printf.sprintf "Chord(%s)" (String.concat "; " (List.map string_of_pitch l))
 ;;
 
 let print_rhythm = function
-  | ERhythm i -> Printf.sprintf "R%d" i
+  | Rhythm i -> Printf.sprintf "R%d" i
 ;;
 
 let print_sound = function
-  | EBasicSound (r, p) -> Printf.sprintf "%s %s" (print_rhythm r) (print_pitch p)
-  | ELongSound (r1, r2, p) ->
+  | BasicSound (r, p) -> Printf.sprintf "%s %s" (print_rhythm r) (print_pitch p)
+  | LongSound (r1, r2, p) ->
     Printf.sprintf "long %s %s %s" (print_rhythm r1) (print_rhythm r2) (print_pitch p)
 ;;
 

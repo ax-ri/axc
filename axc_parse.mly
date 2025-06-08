@@ -31,23 +31,23 @@ expr:
     | IDENT                                 { EExec($1) }
 
 sound_list:
-    | pitch                                             { [EBasicSound(ERhythm(-1), $1)] }
-    | pitch sound_list                                  { (EBasicSound(ERhythm(-1), $1))::$2 }
-    | rhythm pitch                                      { [EBasicSound($1, $2)] }
-    | rhythm pitch sound_list                           { (EBasicSound($1, $2))::$3 }
+    | pitch                                             { [BasicSound(Rhythm(-1), $1)] }
+    | pitch sound_list                                  { (BasicSound(Rhythm(-1), $1))::$2 }
+    | rhythm pitch                                      { [BasicSound($1, $2)] }
+    | rhythm pitch sound_list                           { (BasicSound($1, $2))::$3 }
     | compacted_rhythm                                  { $1 }
     | compacted_rhythm sound_list                       { $1@$2 }
-    | TIE LPAR rhythm rhythm pitch RPAR                 { [ELongSound($3, $4, $5)] }
-    | TIE LPAR rhythm rhythm pitch RPAR sound_list      { (ELongSound($3, $4, $5))::$7 }
-    | DOT LPAR RHYTHM INT pitch RPAR                    { [ELongSound(ERhythm($4), ERhythm(2 * $4), $5)] }
-    | DOT LPAR RHYTHM INT pitch RPAR sound_list         { (ELongSound(ERhythm($4), ERhythm(2 * $4), $5))::$7 }
+    | TIE LPAR rhythm rhythm pitch RPAR                 { [LongSound($3, $4, $5)] }
+    | TIE LPAR rhythm rhythm pitch RPAR sound_list      { (LongSound($3, $4, $5))::$7 }
+    | DOT LPAR RHYTHM INT pitch RPAR                    { [LongSound(Rhythm($4), Rhythm(2 * $4), $5)] }
+    | DOT LPAR RHYTHM INT pitch RPAR sound_list         { (LongSound(Rhythm($4), Rhythm(2 * $4), $5))::$7 }
 
 compacted_rhythm:
-    | rhythm LPAR pitch_list RPAR { (List.map (fun p -> EBasicSound($1, p)) $3) }
+    | rhythm LPAR pitch_list RPAR { (List.map (fun p -> BasicSound($1, p)) $3) }
 
 pitch:
-    | PITCH                                { let (p, s, a) = $1 in ESimplePitch(p, s, a) }
-    | CHORD LPAR simple_pitch_list RPAR    { EMultiplePitch $3 }
+    | PITCH                                { let (p, s, a) = $1 in SimplePitch(p, s, a) }
+    | CHORD LPAR simple_pitch_list RPAR    { MultiplePitch $3 }
 
 simple_pitch_list: 
     | { [] }
@@ -58,5 +58,5 @@ pitch_list:
     | pitch pitch_list { $1::$2 }
 
 rhythm:
-    | RHYTHM INT    { ERhythm $2 }
+    | RHYTHM INT    { Rhythm $2 }
 

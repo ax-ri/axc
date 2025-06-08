@@ -8,10 +8,10 @@ type env =
   }
 
 let init_env () =
-  { tempo = Axc_ast.ERhythm 4, 60
-  ; beat = 4, Axc_ast.ERhythm 4
+  { tempo = Axc_ast.Rhythm 4, 60
+  ; beat = 4, Axc_ast.Rhythm 4
   ; default_scale = 4
-  ; default_rhythm = Axc_ast.ERhythm 4
+  ; default_rhythm = Axc_ast.Rhythm 4
   ; transposition = 0
   ; identifiers = []
   }
@@ -26,13 +26,13 @@ let compute_duration rho r' =
 
 let play_pitch rho p d =
   match p with
-  | Axc_ast.ESimplePitch (p, s, a) ->
+  | Axc_ast.SimplePitch (p, s, a) ->
     Sound_engine.play
       p
       (if s = -1 then rho.default_scale else s)
       (a + rho.transposition)
       d
-  | Axc_ast.EMultiplePitch l ->
+  | Axc_ast.MultiplePitch l ->
     Sound_engine.play_chord
       (List.map
          (fun (p, s, a) ->
@@ -42,9 +42,8 @@ let play_pitch rho p d =
 ;;
 
 let play_sound rho = function
-  | Axc_ast.EBasicSound (Axc_ast.ERhythm r, p) ->
-    play_pitch rho p (compute_duration rho r)
-  | Axc_ast.ELongSound (Axc_ast.ERhythm r1, Axc_ast.ERhythm r2, p) ->
+  | Axc_ast.BasicSound (Axc_ast.Rhythm r, p) -> play_pitch rho p (compute_duration rho r)
+  | Axc_ast.LongSound (Axc_ast.Rhythm r1, Axc_ast.Rhythm r2, p) ->
     play_pitch rho p (compute_duration rho r1 +. compute_duration rho r2)
 ;;
 
