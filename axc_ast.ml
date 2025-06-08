@@ -17,7 +17,7 @@ type expr =
   | EDefaultRhythm of rhythm (* default_rhythm <rhythm> *)
   | ETranspose of int (* transpose <semitones> *)
   | EAssign of (string * expr) (* identifier = <expr> *)
-  | EExec of string (* identifier *)
+  | EExec of string list (* identifier list *)
 
 let string_of_pitch (p, s, a) =
   Printf.sprintf
@@ -53,5 +53,9 @@ let rec print oc = function
   | EDefaultRhythm r -> Printf.fprintf oc "Default rhythm %s" (print_rhythm r)
   | ETranspose n -> Printf.fprintf oc "Transpose %d" n
   | EAssign (s, e) -> Printf.fprintf oc "Ident %s is %a" s print e
-  | EExec s -> Printf.fprintf oc "Exec %s" s
+  | EExec l ->
+    Printf.fprintf
+      oc
+      "%s"
+      (String.concat "; " (List.map (fun s -> Printf.sprintf "Exec %s" s) l))
 ;;

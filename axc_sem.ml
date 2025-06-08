@@ -69,10 +69,13 @@ let rec eval e rho =
   | Axc_ast.EDefaultRhythm r -> rho.default_rhythm <- r
   | Axc_ast.ETranspose n -> rho.transposition <- n
   | Axc_ast.EAssign (id, e) -> rho.identifiers <- add_to_env rho.identifiers id e
-  | Axc_ast.EExec id ->
-    (try
-       let e' = find_expr_in_env rho.identifiers id in
-       eval e' rho
-     with
-     | Not_found -> failwith (Printf.sprintf "Unbound identifier %s" id))
+  | Axc_ast.EExec ids ->
+    List.iter
+      (fun id ->
+         try
+           let e' = find_expr_in_env rho.identifiers id in
+           eval e' rho
+         with
+         | Not_found -> failwith (Printf.sprintf "Unbound identifier %s" id))
+      ids
 ;;

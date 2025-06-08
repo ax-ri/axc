@@ -28,7 +28,7 @@ expr:
     | DEFAULT_RHYTHM rhythm                 { EDefaultRhythm($2) }
     | TRANSPOSE INT                         { ETranspose($2) }
     | IDENT EQUAL expr                      { EAssign($1, $3) }
-    | IDENT                                 { EExec($1) }
+    | ident_list                            { EExec($1) }
 
 sound_list:
     | pitch                                             { [SimpleRhythm(-1), $1] }
@@ -60,3 +60,6 @@ rhythm:
     | TIE LPAR rhythm rhythm RPAR   { ComposedRhythm($3, $4) }
     | DOT LPAR rhythm RPAR          { Utils.dot_to_tie $3 }
 
+ident_list:
+    | IDENT             { [$1] }
+    | IDENT ident_list  { $1::$2 }
