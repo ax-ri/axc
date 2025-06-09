@@ -52,11 +52,11 @@ A sound in AXC is made of a pitch indication (specifying what sound to play)and 
 * a rhythm is introduced with the symbol `!` followed by a number; this number represents the duration of the rhythm. Conventional rhythms numerals are used (e.g. 4 is the quarter note, 8 is the eighth note etc.), please refer to [this Wikipedia article](https://en.wikipedia.org/wiki/Time_signature#Time_signature_notation) for more details. For instance: `!4`, `!8`, `!12`
 * a pitch is written using [scientific notation](https://en.wikipedia.org/wiki/Scientific_pitch_notation). Both latin and letter symbols are allowed (e.g. `a`, `b`, `c` or `do`, `re`, `mi`). Accidentals can be written using `+`, `#`, `s` for sharp and `-`, `b` `f` for flat. For instance: `a5`, `la5`, `d4+`, `sol4b`.
   
-  Chords are written with the keyword `chord` followed by the list of pitchs, for instance `chord(c4 e4 g4)`
+  Chords are written with the keyword `chord` followed by the list of pitches, for instance `chord(c4 e4 g4)`
 
 #### Sound
 
-A sound is then written as the juxtaposition of a rhythm and a pitch, for instance: `!4 c4`, `!8 la3`.
+A sound is then written as the juxtaposition of a rhythm and a pitch, for instance: `!4 c4`, `!8 la3`. Note that you can use parenthesis as a shortcut to specify the rhythm for several pitches, for instance: `!8 (c e g)` (instead of `!8 c !8 e !8 g)`).
 
 You can write several sounds to play sequentially, forming a _list of sounds_, for instance: `!4 c4 !4 e4b !4 g4 !4 chord(c4 e4b 4)`.
 
@@ -103,6 +103,8 @@ More advanced rhythms can be written using the `tie` and `dot` constructions.
 A tie allows you to create a rhythm whose duration is the sum of the durations of two other rhythms. To create one, use the `tie` keyword followed by the two rhythms to combine. Note that these rhythms can be tie also, allowing you to chain ties. For instance `tie(!4 !8)`, `tie(!4 !4)`, `tie(!2 tie(!4 !8))`.
 
 A dot is a special kind of tie: a rhythm with a dot has a duration multiplied by `1.5`. To create a dotted rhythm, use the `dot` keyword followed by the rhythm. Note that you can dot any rhythm, event a tie or another dot. For instance, `dot(!4)`, `dot(tie(!4, !8))`, `dot(dot(!2))`.
+
+_Note_: To write non-binary rhythms, like `triplet` for instance, you can use the fact that any number can be used in a rhythm specifier. For instance, as `!8` is two times shorter than `!4`, then a triplet can be made with `!12`. To write a whole triplet, you can use `!12 (c e sol)`. The same goes for other tuplet.
 
 ### Keywords list
 
