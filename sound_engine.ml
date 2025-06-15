@@ -1,9 +1,13 @@
+let audio_backend = ref "alsa"
+
 (* play a sound using the sox library *)
 (* f is the sound frequency (Hz) and l the length (s) *)
 let sox_beep f l =
   let l_ms = l /. 1000.0 in
   let freq_list = String.concat " " (List.map (fun f -> Printf.sprintf "pl %f" f) f) in
-  let command = Printf.sprintf "play -nq -t alsa synth %f %s" l_ms freq_list in
+  let command =
+    Printf.sprintf "play -nq -t %s synth %f %s" !audio_backend l_ms freq_list
+  in
   let _ = Unix.system command in
   ()
 ;;

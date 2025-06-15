@@ -1,27 +1,32 @@
 let version = "1.0.0"
 
 let usage () =
-  let _ =
-    Printf.eprintf
-      "Usage: %s [file]\n\tRead an AXC program from file (default is stdin)\n%!"
-      Sys.argv.(0)
-  in
-  exit 1
+  Printf.sprintf
+    "Usage: %s [options] [file]\n\
+     \tRead and execute an AXC program from file (default is stdin)\n\
+     %!"
+    Sys.argv.(0)
 ;;
 
 let main () =
+  let spec_list =
+    [ ( "--audio-backend"
+      , Arg.Set_string Sound_engine.audio_backend
+      , "Audio backend to use. This corresponds to the audio type used by Sox (-t \
+         parameter). Default to 'alsa'" )
+    ]
+  in
+  let input_file = ref "" in
+  let anon_fun filename = input_file := filename in
+  let () = Arg.parse spec_list anon_fun (usage ()) in
   let input_channel =
-    match Array.length Sys.argv with
-    | 1 -> stdin
-    | 2 ->
-      (match Sys.argv.(1) with
-       | "-" -> stdin
-       | name ->
-         (try open_in name with
-          | _ ->
-            Printf.eprintf "Opening %s failed\n%!" name;
-            exit 1))
-    | n -> usage ()
+    match !input_file with
+    | "" | "-" -> stdin
+    | name ->
+      (try open_in name with
+       | _ ->
+         Printf.eprintf "Opening %s failed\n%!" name;
+         exit 1)
   in
   let _ = Printf.printf "        Welcome to AXC, version %s\n%!" version in
   let lexbuf = Lexing.from_channel input_channel in

@@ -16,11 +16,23 @@ To use the AXC interpreter to play your source file, you have to build this proj
 
 The AXC interpreter is written in OCaml, so you have to install the following tools to build it from sources:
 
-* `make` and `curl`: `sudo apt install make curl`
+* `git` and `make`: `sudo apt install git build-essential`
 * OCaml, following the [official guide](https://ocaml.org/install#linux_mac_bsd)
 * `ocamlfind`: `opam install ocamlfind`
 
-To play sounds, the interpreter relies on the `play` command of the `sox` library. Install it with `sudo apt install sox`.
+#### Audio backend
+
+To play sounds, the interpreter relies on the `play` command of the `sox` library. Install it with `sudo apt install sox libsox-fmt-all`.
+
+By default, the interpreter uses `alsa` as an audio backend for `sox`. To use another backend (for instance `pulseaudio`), use the `--audio-backend` command line parameter of the interpreter.
+
+*Note for WSL users* : WSL seems to only supports `pulseaudio`, so it is mandatory to use 
+
+```bash
+./axc_loop --audio-backend pulseaudio
+```
+
+on WSL.
 
 ### Build
 
@@ -30,7 +42,17 @@ First, clone this repository. Then, in the root directory of the project, run `m
 
 You can launch the AXC interpreter in interactive mode with `./axc_loop`. You should use [`rlwrap`](https://github.com/hanslub42/rlwrap) for a better user experience.
 
-To run code from a source file, use Bash input redirection, e.g. `./axc_loop < examples/godfather.axc`.
+To run code from a source file, pass the filepath as the first argument of the interpreter, e.g. 
+
+```bash
+./axc_loop examples/godfather.axc
+```
+
+Alternatively you can use Bash input redirection, e.g. 
+
+```bash
+./axc_loop < examples/godfather.axc
+```
 
 ## Syntax
 
@@ -64,7 +86,7 @@ You can write several sounds to play sequentially, forming a _list of sounds_, f
 
 You can change the speed of the music with a tempo indication. You can use it any time in the source code: all the next statements will be affected (until another tempo statement changes the speed). 
 
-To specify the speed, the standard notation from music sheets is used: a rhythm indication followed by how many of this rhythm is contained in one minute (for instance, `♩ = 60` means "60 quarters note in 1 minute", e.g. one per second; `♩ = 120` means 2 quarters note per second etc.). The tempo statement follows this idea: use the `tempo` keyword followed by the rhythm indication and the number of times it appears in a minute. For instance: `tempo !4 60`, `tempo !8 80`.
+To specify the speed, the standard notation from music sheets is used: a rhythm indication followed by how many of this rhythm is contained in one minute (for instance, `♩ = 60` means "60 quarters note in 1 minute", i.e. one per second; `♩ = 120` means 2 quarters note per second etc.). The tempo statement follows this idea: use the `tempo` keyword followed by the rhythm indication and the number of times it appears in a minute. For instance: `tempo !4 60`, `tempo !8 80`.
 
 ### Beat
 
